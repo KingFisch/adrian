@@ -1,0 +1,108 @@
+<script>
+                let store = "sevora-de.myshopify.com"
+                let zeroTraffic = {"26e554a8-ac1c-4b60-998b-ca96c1b206e1":true};
+          let allTests = {"26e554a8-ac1c-4b60-998b-ca96c1b206e1":{"0":"du-wirst-geliebt-armband","1":"https://sevora.de/products/du-wirst-geliebt-armband-1"}};
+          let runningTests = {"26e554a8-ac1c-4b60-998b-ca96c1b206e1":{"0":"du-wirst-geliebt-armband","1":"https://sevora.de/products/du-wirst-geliebt-armband-1"}};
+  
+          let siteUrl = window.location.origin + window.location.pathname;
+          let paramsLine;
+          let params = {};
+          var getParams = function (link) {
+          params = {};
+          var parser = document.createElement("a");
+          parser.href = link;
+          paramsLine = parser.search.substring(1);
+          var vars = paramsLine.split("&");
+          for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            params[pair[0]] = decodeURIComponent(pair[1]);
+          }
+          return true;
+          };
+          let getParamsLine = (link) => {
+            var parser = document.createElement("a");
+            parser.href = link;
+            return parser.search.substring(1);
+          }
+          getParams(window.location.href);
+          let hrefUrl = window.location.href;
+          hrefUrl = hrefUrl.split("?");
+          hrefUrl = hrefUrl[0];
+          if(hrefUrl[hrefUrl.length - 1] === "/"){
+            hrefUrl = hrefUrl.slice(0, hrefUrl.length - 1)
+        }
+          hrefUrl = hrefUrl.split("/");
+          let page = hrefUrl[hrefUrl.length - 1];
+          
+          let testList  = JSON.parse(localStorage.getItem("ABTL"))
+          
+  
+
+
+          const handleTest = async ({ testID, unique }) => {
+            let newObj = testList
+            let testVar
+            if(testList === null || testList === undefined){
+              newObj = {}
+            }
+            if(unique){
+            const keys = Object.keys(runningTests[testID]);
+          	
+           testVar = keys[Math.floor(Math.random() * keys.length)];
+          newObj[testID] = testVar
+          if(testVar != "0"){
+          window.location.href =
+                    allTests[testID][testVar] + "?" + paramsLine;
+          }
+            } else {
+              testVar = newObj[testID]
+              if(testVar != "0"){
+              window.location.href =
+                    allTests[testID][testVar] + "?" + paramsLine;
+              }
+            }
+            let addedViews = JSON.parse(sessionStorage.getItem("ABAV"))
+            if(addedViews === null || addedViews === "null" || addedViews === undefined){
+              addedViews = {}
+            }
+            if(addedViews[testID] != true){
+              addedViews[testID] = true
+              await sessionStorage.setItem("ABAV", JSON.stringify(addedViews));
+              await localStorage.setItem("ABTL", JSON.stringify(newObj))
+              // need to make addattributes add to the array of objects for the orders webhook
+              // need to add a function that removes object items if they are paused or no longer active
+          var http = new XMLHttpRequest();
+          var addViewUrl =
+          'https://sevora.de/apps/elevateab/addview';
+          var params = `testID=${testID}&Variation=${testVar}&unique=${unique}&referrer=${document.referrer}&store=${store}`;
+          http.open("POST", addViewUrl, true);
+          http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          http.send(params);
+            }
+          }
+          
+          let onStart = () => {
+          
+            for(let item in runningTests){
+              if(page === allTests[item]["0"] && zeroTraffic[item] != true){
+                // current page match
+                if(testList === null || testList === undefined) {
+                  // add this test to the obj 
+                  handleTest({testID: item, unique: true})
+                } else {
+                  if(testList[item]){
+                    handleTest({testID: item, unique: false})
+                    // show the variation and its not unique
+                  } else {
+                    handleTest({testID: item, unique: true})
+                  }
+                }
+          
+              }
+            }
+          
+          }
+          if(paramsLine != "control"){
+            onStart()
+    }
+                  </script>

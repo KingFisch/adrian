@@ -1,0 +1,39 @@
+<section class="homepage_timer">
+  <div class="timer__details">
+    <h4>{{section.settings.hds}}</h4>
+    <h5>{{section.settings.subds}}</h5>
+  </div>
+<div id="timer"></div>
+</section>
+
+
+
+{% schema %}
+  {
+    "name": "Countdown Timer",
+    "settings": [
+		{
+			"label": "Heading",
+			"type": "text",
+			"id": "hds"
+		},
+		{
+			"label": "Sub Head",
+			"type": "text",
+			"id": "subds"
+		}
+],
+"presets":[
+	{
+		"name": "Countdown Timer",
+		"settings":{}
+}
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

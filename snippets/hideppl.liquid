@@ -1,0 +1,41 @@
+<script>
+
+
+  var cleaned_host = window.location.host;
+  console.log(cleaned_host)
+ let statuAtc='Y' 
+                        let statuCheckOut = 'Y' 
+                        let statuApp =  '1'
+                            if(statuCheckOut == "Y") {                        
+                        var whole_window_url = new URL(window.location.href);
+                        var pathname = whole_window_url.pathname;
+                        var url_depth = pathname.split("/").length-1;
+                        var prefix = '';
+                        var shop = cleaned_host
+function serviceWorkerRegistered(){
+ if(url_depth > 1){
+ for(loop=1;loop < url_depth; loop++){
+                                prefix += "../";
+                            }
+                        }
+                      
+                        var prefix_scope = '';
+                        if(url_depth > 0){
+                            for(loop=0;loop < url_depth; loop++){
+                                prefix_scope += "../";
+                            }
+                        }
+                        if ('serviceWorker' in navigator) {
+                                    navigator.serviceWorker.register('https://'+shop+'/a/4651387/hdcheckout.js', {
+                                        scope: ''+prefix_scope+''
+                                    }).then(serviceWorkerRegistered);
+                                }
+                        }
+
+   serviceWorkerRegistered();
+ setTimeout(function(){                        
+    serviceWorkerRegistered();     
+ }, 4500);
+ }
+      
+                        </script> <script async src="//{{ shop.domain }}/a/4651387/hideppl.js"></script>

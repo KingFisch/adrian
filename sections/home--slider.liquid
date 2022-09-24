@@ -1,0 +1,56 @@
+<section  class="collection--ssd">
+  <div class="owl-carousel owl-theme" id="owl--newi">
+    {% for block in section.blocks %}
+    <div class="items">
+      <a href="{{block.settings.lnks}}">
+        <img src="{{block.settings.imgc | img_url: 'master' }}">
+        <h6>{{block.settings.dfrr}}</h6>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Collection Slider",
+    "settings": [
+],
+"blocks":[
+	{
+		"name": "Collection Slider Home",
+		"type": "block-q",
+		"settings":[
+			{
+				"label": "Image",
+				"type":"image_picker",
+				"id": "imgc"
+			},
+			{
+				"label": "Title",
+				"type": "text",
+				"id": "dfrr"
+			},
+			{
+				"label": "Link",
+				"type": "url",
+				"id": "lnks"
+			}
+]
+}
+],
+"presets":[
+	{
+		"name": "Collection Slider Home",
+		"category": "Collection",
+		"settings":{}
+}
+]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
